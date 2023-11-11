@@ -5,8 +5,8 @@ def main():
     url = "https://studies.cs.helsinki.fi/nhlstats/2022-23/players"
     response = requests.get(url).json()
 
-    print("JSON-muotoinen vastaus:")
-    print(response)
+    #print("JSON-muotoinen vastaus:")
+    #print(response)
 
     players = []
 
@@ -16,6 +16,9 @@ def main():
 
     print("Oliot:")
 
+    players = sorted(
+        [player for player in players if player.nationality == "FIN"],
+        key = lambda x: x.points, reverse=True)
     for player in players:
         print(player)
 
