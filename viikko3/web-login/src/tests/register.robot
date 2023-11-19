@@ -33,7 +33,39 @@ Register With Nonmatching Password And Password Confirmation
     Submit Credentials
     Register Should Fail With Message  Password does not match password confirmation
 
+Login After Successful Registration
+    Set Username  emly
+    Set Password  salasana123
+    Set Password Confirmation  salasana123
+    Submit Credentials
+    Register Should Succeed
+    Go To Login Page
+    Set Username  emly
+    Set Password  salasana123
+    Submit Login
+    Login Should Succeed
+
+Login After Failed Registration
+    Set Username  emlya
+    Set Password  salasana123
+    Set Password Confirmation  salasana12
+    Submit Credentials
+    Register Should Fail With Message  Password does not match password confirmation
+    Go To Login Page
+    Set Username  emlya
+    Set Password  salasana123
+    Submit Login
+    Login Should Fail With Message  Invalid username or password
+
 *** Keywords ***
+Login Should Succeed
+    Main Page Should Be Open
+
+Login Should Fail With Message
+    [Arguments]  ${message}
+    Login Page Should Be Open
+    Page Should Contain  ${message}
+
 Register Should Succeed
     Welcome Page Should Be Open
 
@@ -45,6 +77,9 @@ Register Should Fail With Message
 Submit Credentials
     Click Button  Register
 
+Submit Login
+    Click Button  Login
+    
 Set Username
     [Arguments]  ${username}
     Input Text  username  ${username}
