@@ -82,3 +82,50 @@ class TestKauppa(unittest.TestCase):
         kauppa.tilimaksu("Matti", "12233")
 
         self.pankki_mock.tilisiirto.assert_called_with("Matti", VIITE, "12233", KAUPPA, 3)
+
+    def test_aloita_alusta_nollaa_ostoksen(self):
+        ostoskori_mock = Mock()
+        kauppa = Kauppa(self.varasto_mock, self.pankki_mock, self.viitegeneraattori_mock)
+        kauppa.aloita_asiointi()
+        id1 = ostoskori_mock.copy()
+        kauppa.lisaa_koriin(2)
+        kauppa.aloita_asiointi()
+        id2 = ostoskori_mock
+
+        self.assertNotEqual(id1, id2)
+
+    def test_kauppa_pyytaa_aina_uuden_viite_numeron(self):
+        kauppa = Kauppa(self.varasto_mock, self.pankki_mock, self.viitegeneraattori_mock)
+        kauppa.aloita_asiointi()
+        kauppa.lisaa_koriin(2)
+        kauppa.lisaa_koriin(3)
+        kauppa.tilimaksu("Matti", "12233")
+
+        self.pankki_mock.tilisiirto.assert_called_with("Matti", VIITE, "12233", KAUPPA, 3)
+        self.viitegeneraattori_mock.uusi.return_value = 55
+        kauppa.aloita_asiointi()
+        kauppa.lisaa_koriin(2)
+        kauppa.lisaa_koriin(3)
+        kauppa.tilimaksu("Matti", "12233")
+        self.pankki_mock.tilisiirto.assert_called_with("Matti", 55, "12233", KAUPPA, 3)
+
+    def test_poistettu_tuote_poistetaan_ostoskorista(self):
+        ostoskori_mock = Mock()
+        kauppa = Kauppa(self.varasto_mock, self.pankki_mock, self.viitegeneraattori_mock)
+        kauppa.aloita_asiointi()
+        kauppa.lisaa_koriin(2)
+        kauppa.lisaa_koriin(1)
+        kauppa.poista_korista(2)
+        kauppa.tilimaksu("Matti", "12233")
+
+        self.pankki_mock.tilisiirto.assert_called_with("Matti", VIITE, "12233", KAUPPA, 5)
+        
+    def test_poistettu_tuote_palautetaan_varastoon(self):
+        ostoskori_mock = Mock()
+        kauppa = Kauppa(self.varasto_mock, self.pankki_mock, self.viitegeneraattori_mock)
+        kauppa.aloita_asiointi()
+        kauppa.lisaa_koriin(2)
+        kauppa.poista_korista(2)
+
+        self.varasto_mock.palauta_varastoon.assert_called_with(Tuote(2, "banaani", 3))        
+
