@@ -1,6 +1,7 @@
 class Sovelluslogiikka:
     def __init__(self, arvo=0):
         self._arvo = arvo
+        self._edellinen_komento = None
 
     def miinus(self, operandi):
         self._arvo = self._arvo - operandi
@@ -16,6 +17,9 @@ class Sovelluslogiikka:
 
     def arvo(self):
         return self._arvo
-    
-    def kumoa(self):
-        pass
+
+    def edellinen(self):
+        return self._edellinen_komento
+
+    def paivita_edellinen(self, komento):
+        self._edellinen_komento = komento
