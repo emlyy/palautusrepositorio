@@ -7,17 +7,12 @@ class IntJoukko:
     def _luo_lista(self, koko):
         return [0] * koko
     
-    def __init__(self, kapasiteetti=None, kasvatuskoko=None):
-        if kapasiteetti is None:
-            self.kapasiteetti = KAPASITEETTI
-        elif not isinstance(kapasiteetti, int) or kapasiteetti < 0:
+    def __init__(self, kapasiteetti=KAPASITEETTI, kasvatuskoko=OLETUSKASVATUS):
+        if not isinstance(kapasiteetti, int) or kapasiteetti < 0:
             raise Exception("Väärä kapasiteetti")  # heitin vaan jotain :D
         else:
             self.kapasiteetti = kapasiteetti
-
-        if kasvatuskoko is None:
-            self.kasvatuskoko = OLETUSKASVATUS
-        elif not isinstance(kapasiteetti, int) or kapasiteetti < 0:
+        if not isinstance(kapasiteetti, int) or kapasiteetti < 0:
             raise Exception("kapasiteetti2")  # heitin vaan jotain :D
         else:
             self.kasvatuskoko = kasvatuskoko
@@ -26,20 +21,20 @@ class IntJoukko:
 
         self.alkioiden_lkm = 0
 
-    def kuuluu(self, n):
-        for i in range(0, self.alkioiden_lkm):
-            if n == self.numero_lista[i]:
+    def kuuluu(self, numero):
+        for i in range(self.alkioiden_lkm):
+            if numero == self.numero_lista[i]:
                 return True
         return False
 
-    def lisaa(self, n):
+    def lisaa(self, numero):
         if self.alkioiden_lkm == 0:
-            self.numero_lista[0] = n
+            self.numero_lista[0] = numero
             self.alkioiden_lkm += 1
             return True
 
-        if not self.kuuluu(n):
-            self.numero_lista[self.alkioiden_lkm] = n
+        if not self.kuuluu(numero):
+            self.numero_lista[self.alkioiden_lkm] = numero
             self.alkioiden_lkm += 1
 
             # ei mahdu enempää, luodaan uusi säilytyspaikka luvuille
@@ -56,9 +51,9 @@ class IntJoukko:
         self.numero_lista = self._luo_lista(self.alkioiden_lkm + self.kasvatuskoko)
         self.kopioi_lista(vanha_lista, self.numero_lista)
     
-    def poista(self, n):
-        for i in range(0, self.alkioiden_lkm):
-            if n == self.numero_lista[i]:
+    def poista(self, numero):
+        for i in range(self.alkioiden_lkm):
+            if numero == self.numero_lista[i]:
               # siis luku löytyy tuosta kohdasta :D
                 self.numero_lista[i] = 0
                 if self.siirra_alkiot(i):
@@ -77,7 +72,7 @@ class IntJoukko:
         return False
 
     def kopioi_lista(self, vanha_lista, uusi_lista):
-        for i in range(0, len(vanha_lista)):
+        for i in range(len(vanha_lista)):
             uusi_lista[i] = vanha_lista[i]
 
     def mahtavuus(self):
@@ -121,7 +116,7 @@ class IntJoukko:
 
         lisaa_taulu_joukkoon(joukko, a_taulu)
 
-        for i in range(0, len(b_taulu)):
+        for i in range(len(b_taulu)):
             joukko.poista(b_taulu[i])
 
         return joukko
@@ -139,5 +134,5 @@ class IntJoukko:
         return tuotos
 
 def lisaa_taulu_joukkoon(joukko, taulu):
-        for i in range(0, len(taulu)):
+        for i in range(len(taulu)):
             joukko.lisaa(taulu[i])
