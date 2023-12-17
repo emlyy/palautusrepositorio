@@ -2,14 +2,16 @@ from kps_pelaaja_vs_pelaaja import KPSPelaajaVsPelaaja
 from kps_tekoaly import KPSTekoaly
 from kps_parempi_tekoaly import KPSParempiTekoaly
 from console_io import ConsoleIO
-
+from tuomari import Tuomari
+from tekoaly import Tekoaly
+from tekoaly_parannettu import TekoalyParannettu
 
 class PeliTehdas:
     def __init__(self):
         self.pelit = {
-            "a": KPSPelaajaVsPelaaja(),
-            "b": KPSTekoaly(),
-            "c": KPSParempiTekoaly()
+            "a": KPSPelaajaVsPelaaja(ConsoleIO(), Tuomari(), None),
+            "b": KPSTekoaly(ConsoleIO(), Tuomari(), Tekoaly()),
+            "c": KPSParempiTekoaly(ConsoleIO(), Tuomari(), TekoalyParannettu(10))
         }
 
     def hae(self, peli):
