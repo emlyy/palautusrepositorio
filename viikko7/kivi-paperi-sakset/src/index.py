@@ -22,16 +22,16 @@ class PeliTehdas:
 
 def main():
     pelit = PeliTehdas()
-    IO = ConsoleIO()
+    io = ConsoleIO()
     while True:
-        vastaus = IO.pelaajan_syote("Valitse pelataanko"
+        vastaus = io.pelaajan_syote("Valitse pelataanko"
               "\n (a) Ihmistä vastaan"
               "\n (b) Tekoälyä vastaan"
               "\n (c) Parannettua tekoälyä vastaan"
               "\nMuilla valinnoilla lopetetaan"
               "\n ")
 
-        IO.kirjoita(
+        io.kirjoita(
             "Peli loppuu kun pelaaja antaa virheellisen siirron eli jonkun muun kuin k, p tai s"
             )
 
